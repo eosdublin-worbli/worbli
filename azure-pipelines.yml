@@ -1,5 +1,7 @@
 trigger:
-  - releases/*
+  tags:
+    include:
+      - worbli-*
 
 jobs:
 - job:
