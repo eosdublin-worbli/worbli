@@ -11,13 +11,13 @@ jobs:
   steps:
   - script: git submodule update --init --recursive
     displayName: Initialize submodules
-    
+
   - script: sed -i 's/"${MEM_MEG}" -lt 7000/"${MEM_MEG}" -lt 4000/g' scripts/eosio_build_ubuntu.sh
     displayName: Override EOS build script RAM check
 
   - script: sed -i 's/mv ${PROJECT}.deb ${NAME}.deb || exit 1/mv ${PROJECT}.deb $(Build.ArtifactStagingDirectory)/${NAME}.deb || exit 1/g' scripts/eosio_build_ubuntu.sh
     displayName: Override DEB creation script to move DEB to artifacts staging directory
-	
+
 #  - script: sed -i 's/\.\/bootstrap\.sh --prefix=\$BOOST_ROOT/\.\/bootstrap\.sh --prefix=\$BOOST_ROOT --with-toolset=clang/' scripts/eosio_build_ubuntu.sh
 #    displayName: Force Boost compilation with clang
 
