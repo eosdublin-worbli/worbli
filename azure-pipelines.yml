@@ -15,9 +15,17 @@ jobs:
   - script: sed -i 's/"${MEM_MEG}" -lt 7000/"${MEM_MEG}" -lt 4000/g' scripts/eosio_build_ubuntu.sh
     displayName: Override EOS build script RAM check
 
+  - script: echo "$(Build.ArtifactStagingDirectory)"
+    displayName: echo
+    
   - script: sed -i 's#mv ${PROJECT}.deb ${NAME}.deb || exit 1#mv ${PROJECT}.deb $(Build.ArtifactStagingDirectory)/${NAME}.deb || exit 1#g' scripts/generate_deb.sh
     displayName: Override DEB creation script to move DEB to artifacts staging directory
 
+  - script: |
+    cat scripts/generate_deb.sh
+    echo "$(Build.ArtifactStagingDirectory)"
+    displayName: Debug DEB package generation
+    
 #  - script: sed -i 's/\.\/bootstrap\.sh --prefix=\$BOOST_ROOT/\.\/bootstrap\.sh --prefix=\$BOOST_ROOT --with-toolset=clang/' scripts/eosio_build_ubuntu.sh
 #    displayName: Force Boost compilation with clang
 
@@ -29,10 +37,14 @@ jobs:
 
   - script: |
       cd $(Build.SourcesDirectory)/build/packages
-      chmod u+x generate_package.sh generate_deb.sh
-      ./generate_package.sh deb
+      chmod u+x $(Build.SourcesDirectory)/build/packages/generate_package.sh $(Build.SourcesDirectory)/build/packages/generate_deb.sh
+      . $(Build.SourcesDirectory)/build/packages/generate_package.sh deb
     displayName: Create DEB package
 
+  - script: |
+      ls $(Build.SourcesDirectory)/build/packages
+      ls $(Build.ArtifactStagingDirectory)
+      
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: $(Build.ArtifactStagingDirectory)
