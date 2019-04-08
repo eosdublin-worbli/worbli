@@ -17,8 +17,9 @@ jobs:
 
   - script: echo "$(Build.ArtifactStagingDirectory)"
     displayName: echo
-    
-  - script: sed -i 's#mv ${PROJECT}.deb ${NAME}.deb || exit 1#mv ${PROJECT}.deb $(Build.ArtifactStagingDirectory)/${NAME}.deb || exit 1#g' scripts/generate_deb.sh
+ 
+# This varies between 1.6.x and 1.7.x. In 1.7.x they added "|| exit" to the command. Instead, we will just replace the stuff before that
+  - script: sed -i 's#mv ${PROJECT}.deb ${NAME}.deb#mv ${PROJECT}.deb $(Build.ArtifactStagingDirectory)/${NAME}.deb#g' scripts/generate_deb.sh
     displayName: Override DEB creation script to move DEB to artifacts staging directory
 
   - script: |
