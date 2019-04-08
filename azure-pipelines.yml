@@ -22,8 +22,8 @@ jobs:
     displayName: Override DEB creation script to move DEB to artifacts staging directory
 
   - script: |
-    cat scripts/generate_deb.sh
-    echo "$(Build.ArtifactStagingDirectory)"
+      cat scripts/generate_deb.sh
+      echo "$(Build.ArtifactStagingDirectory)"
     displayName: Debug DEB package generation
     
 #  - script: sed -i 's/\.\/bootstrap\.sh --prefix=\$BOOST_ROOT/\.\/bootstrap\.sh --prefix=\$BOOST_ROOT --with-toolset=clang/' scripts/eosio_build_ubuntu.sh
@@ -44,7 +44,8 @@ jobs:
   - script: |
       ls $(Build.SourcesDirectory)/build/packages
       ls $(Build.ArtifactStagingDirectory)
-      
+    displayName: Debug
+    
   - task: PublishBuildArtifacts@1
     inputs:
       pathtoPublish: $(Build.ArtifactStagingDirectory)
